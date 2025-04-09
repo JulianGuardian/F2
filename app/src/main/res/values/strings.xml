@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">F2</string>
+    <string name="app_name">ALT F1</string>
     <string name="pilot_name_1">Max Verstappen</string>
     <string name="pilot_name_2">Max Verstappen</string>
     <string name="pilot_name_3">Max Verstappen</string>
@@ -17,7 +17,7 @@
     <string name="F1_teams_6">Mercedes</string>
     <string name="F1_teams_7">Alfa Romeo</string>
     <string name="Button_1">Add Racer</string>
-    <string name="Button_2">Back</string>
+    <string name="Button_2">Go Back</string>
     <string name="Text_1">Name</string>
     <string name="Text_2">Team</string>
 
