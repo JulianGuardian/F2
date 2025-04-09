@@ -1,6 +1,7 @@
 package com.example.f2
 
 import android.os.Bundle
+import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
@@ -18,6 +19,7 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.Card
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
@@ -26,6 +28,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.painterResource
@@ -35,6 +38,12 @@ import androidx.compose.ui.unit.dp
 import com.example.f2.data.Pilot
 import com.example.f2.data.pilot
 import com.example.f2.ui.theme.F2Theme
+import androidx.compose.foundation.border
+import androidx.compose.material3.FloatingActionButtonDefaults
+import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.ui.platform.LocalContext
+
+
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -54,11 +63,14 @@ class MainActivity : ComponentActivity() {
 }
 
 @Composable
-fun F2App(){
+fun F2App() {
     Scaffold(
-        topBar= {F2TopBar()}
-    ) { it ->
-        LazyColumn(contentPadding = it) {
+        topBar = { F2TopBar() },
+        floatingActionButton = {
+            FloatingButton ()
+        }
+    ) { innerPadding ->
+        LazyColumn(contentPadding = innerPadding) {
             items(pilot) {
                 PilotItem(
                     pilot = it,
@@ -68,6 +80,7 @@ fun F2App(){
         }
     }
 }
+
 
 @Composable
 fun PilotItem(
@@ -152,30 +165,37 @@ fun F2TopBar(modifier: Modifier = Modifier){
         },
         modifier = modifier
     )
+}
 
+@Composable
+fun FloatingButton(modifier: Modifier=Modifier){
+    val context = LocalContext.current
 
-    @Composable
-    fun CustomFAB(onClick: () -> Unit) {
-        FloatingActionButton(
-            onClick = onClick,
-            containerColor = Color(0xFFD3F1DF), // Verde muy claro (puedes ajustarlo)
-            shape = CircleShape,
-            elevation = FloatingActionButtonDefaults.elevation(defaultElevation = 4.dp),
-            modifier = Modifier
-                .size(56.dp) // Tamaño del botón
-                .border(
-                    width = 1.dp,
-                    color = Color.Black, // Borde negro
-                    shape = CircleShape
-                )
-        ) {
-            Icon(
-                imageVector = Icons.Default.Add, // Ícono "+"
-                contentDescription = "Agregar",
-                tint = Color.Black // Color del ícono
+    FloatingActionButton(
+        onClick = {
+            Toast.makeText(context, "Hola mundo", Toast.LENGTH_SHORT).show()
+
+        },
+        shape = CircleShape,
+        elevation = FloatingActionButtonDefaults.elevation(defaultElevation = 4.dp),
+        modifier=modifier
+            .size(56.dp)
+            .border(
+                width = 1.dp,
+                color = Color.Black,
+                shape = CircleShape
             )
-        }
+    ) {
+        Image(
+            modifier = modifier
+                .size(dimensionResource(R.dimen.image_size))
+                .padding(dimensionResource(R.dimen.padding_small))
+                .clip(MaterialTheme.shapes.small),
+            contentScale = ContentScale.Crop,
+            painter = painterResource(R.drawable.add),
+
+            contentDescription = null
+        )
+
     }
-
-
 }
