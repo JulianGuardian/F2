@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+
     <string name="app_name">F2</string>
     <string name="pilot_name_1">Carlos Sainz</string>
     <string name="pilot_name_2">Fernando Alonso</string>
@@ -16,8 +17,7 @@
     <string name="F1_teams_4">MCLaren</string>
     <string name="F1_teams_5">Mercedes</string>
     <string name="F1_teams_6">Alfa Romeo</string>
-    <string name="Button_1">Añadir Corredor</string>
+    <string name="Button_1">Añadir Piloto</string>
     <string name="Button_2">Volver</string>
     <string name="Text_1">Nombre</string>
     <string name="Text_2">Escuderia</string>
-</resources>
