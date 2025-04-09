@@ -1,24 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">ALT F1</string>
-    <string name="pilot_name_1">Max Verstappen</string>
-    <string name="pilot_name_2">Max Verstappen</string>
-    <string name="pilot_name_3">Max Verstappen</string>
-    <string name="pilot_name_4">Max Verstappen</string>
-    <string name="pilot_name_5">Max Verstappen</string>
-    <string name="pilot_name_6">Max Verstappen</string>
-    <string name="pilot_name_7">Max Verstappen</string>
+
+    <string name="app_name">F2</string>
+    <string name="pilot_name_1">Carlos Sainz</string>
+    <string name="pilot_name_2">Fernando Alonso</string>
+    <string name="pilot_name_3">Lando Norris</string>
+    <string name="pilot_name_4">Sergio Perez</string>
+    <string name="pilot_name_5">George Russell</string>
+    <string name="pilot_name_6">Charles_Leclerc</string>
+    <string name="pilot_name_7">Lewis Hamilton</string>
     <string name="pilot_name_8">Max Verstappen</string>
-    <string name="pilot_name_9">Max Verstappen</string>
+    <string name="pilot_name_9">Valtteri Bottas</string>
     <string name="F1_teams_1">RedBull</string>
     <string name="F1_teams_2">Aston Martin</string>
     <string name="F1_teams_3">Ferrari</string>
     <string name="F1_teams_4">MCLaren</string>
-    <string name="F1_teams_5">WILLIAMS</string>
-    <string name="F1_teams_6">Mercedes</string>
-    <string name="F1_teams_7">Alfa Romeo</string>
+    <string name="F1_teams_5">Mercedes</string>
+    <string name="F1_teams_6">Alfa Romeo</string>
     <string name="Button_1">Añadir Piloto</string>
     <string name="Button_2">Volver</string>
     <string name="Text_1">Nombre</string>
     <string name="Text_2">Escuderia</string>
-</resources>
