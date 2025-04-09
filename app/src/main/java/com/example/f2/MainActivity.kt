@@ -1,7 +1,6 @@
 package com.example.f2
 
 import android.os.Bundle
-import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
@@ -67,11 +66,6 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize()
                 ){
                     F2App()
-                    /*CreatePilot(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(16.dp)
-                    )*/
                 }
 
             }
@@ -79,23 +73,41 @@ class MainActivity : ComponentActivity() {
     }
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun F2App() {
-    Scaffold(
-        topBar = { F2TopBar() },
-        floatingActionButton = {
-            FloatingButton ()
-        }
-    ) { innerPadding ->
-        LazyColumn(contentPadding = innerPadding) {
-            items(pilot) {
-                PilotItem(
-                    pilot = it,
-                    modifier = Modifier.padding(dimensionResource(R.dimen.padding_small))
-                )
+    var showCreatePilot by remember {
+        mutableStateOf(false)
+    }
+
+    if(showCreatePilot){
+        CreatePilot(
+            onCancel = { showCreatePilot = false },
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(16.dp)
+        )
+    }
+    else{
+        Scaffold(
+            topBar = { F2TopBar() },
+            floatingActionButton = {
+                FloatingButton {
+                    showCreatePilot = true
+                }
+            }
+        ) { innerPadding ->
+            LazyColumn(contentPadding = innerPadding) {
+                items(pilot) {
+                    PilotItem(
+                        pilot = it,
+                        modifier = Modifier.padding(dimensionResource(R.dimen.padding_small))
+                    )
+                }
             }
         }
     }
+
 }
 
 
@@ -181,14 +193,11 @@ fun F2TopBar(modifier: Modifier = Modifier){
 }
 
 @Composable
-fun FloatingButton(modifier: Modifier=Modifier){
+fun FloatingButton(modifier: Modifier=Modifier, onClick: () -> Unit){
     val context = LocalContext.current
 
     FloatingActionButton(
-        onClick = {
-            Toast.makeText(context, "Hola mundo", Toast.LENGTH_SHORT).show()
-
-        },
+        onClick = onClick,
         shape = CircleShape,
         elevation = FloatingActionButtonDefaults.elevation(defaultElevation = 4.dp),
         modifier=modifier
@@ -268,7 +277,7 @@ fun CustomButton(text: String, modifier: Modifier = Modifier, onClick: () -> Uni
 }
 
 @Composable
-fun CreatePilot(modifier: Modifier = Modifier) {
+fun CreatePilot(modifier: Modifier = Modifier, onCancel: () -> Unit) {
     Column (
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
@@ -310,7 +319,7 @@ fun CreatePilot(modifier: Modifier = Modifier) {
 
         CustomButton(
             text = stringResource(R.string.Button_2),
-            onClick = { /* Handle button click */ }
+            onClick = onCancel
         )
     }
 }
@@ -320,6 +329,7 @@ fun CreatePilot(modifier: Modifier = Modifier) {
 fun GreetingPreview() {
     F2Theme {
         CreatePilot(
+            onCancel = {},
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(16.dp)
