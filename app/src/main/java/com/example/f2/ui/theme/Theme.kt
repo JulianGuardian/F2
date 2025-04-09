@@ -271,9 +271,10 @@ fun F2Theme(
   }
 
   MaterialTheme(
-    colorScheme = colorScheme,
-    typography = AppTypography,
-    content = content
+      colorScheme = colorScheme,
+      typography = AppTypography,
+      shapes = Shapes,
+      content = content
   )
 }
 
