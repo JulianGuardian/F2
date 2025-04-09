@@ -50,7 +50,6 @@ import com.example.f2.data.Pilot
 import com.example.f2.data.pilot
 import com.example.f2.ui.theme.F2Theme
 import androidx.compose.material3.FloatingActionButtonDefaults
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import com.example.f2.ui.theme.Roboto
 import com.example.f2.ui.theme.SegoeUI
@@ -73,7 +72,6 @@ class MainActivity : ComponentActivity() {
     }
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun F2App() {
     var showCreatePilot by remember {
@@ -194,7 +192,6 @@ fun F2TopBar(modifier: Modifier = Modifier){
 
 @Composable
 fun FloatingButton(modifier: Modifier=Modifier, onClick: () -> Unit){
-    val context = LocalContext.current
 
     FloatingActionButton(
         onClick = onClick,
