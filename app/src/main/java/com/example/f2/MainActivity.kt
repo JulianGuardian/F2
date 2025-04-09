@@ -114,6 +114,98 @@ fun PilotItem(
 }
 
 @Composable
+fun PilotIcon(
+    @DrawableRes pilotIcon: Int,
+    modifier: Modifier = Modifier
+){
+    Image(
+        modifier = modifier
+            .size(dimensionResource(R.dimen.image_size))
+            .padding(dimensionResource(R.dimen.padding_small))
+            .clip(MaterialTheme.shapes.small),
+        contentScale = ContentScale.Crop,
+        painter = painterResource(pilotIcon),
+
+        contentDescription = null
+    )
+
+}
+
+@Composable
+fun PilotInformation(
+    @StringRes pilotName: Int,
+    @StringRes pilotTeam: Int,
+    modifier: Modifier = Modifier
+) {
+    Column(modifier = modifier) {
+        Text(
+            text = stringResource(pilotName),
+            style = MaterialTheme.typography.displaySmall,
+            modifier = Modifier.padding(top = dimensionResource(R.dimen.padding_small))
+        )
+        Text(
+            text = stringResource(pilotTeam),
+            style = MaterialTheme.typography.bodyLarge
+        )
+    }
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun F2TopBar(modifier: Modifier = Modifier){
+    CenterAlignedTopAppBar(
+        title = {
+            Row(
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Image(
+                    modifier = Modifier
+                        .size(200.dp),
+                    painter = painterResource(R.drawable.logo_alt_f1),
+
+                    contentDescription = null
+                )
+            }
+        },
+        modifier = modifier
+    )
+}
+
+@Composable
+fun FloatingButton(modifier: Modifier=Modifier){
+    val context = LocalContext.current
+
+    FloatingActionButton(
+        onClick = {
+            Toast.makeText(context, "Hola mundo", Toast.LENGTH_SHORT).show()
+
+        },
+        shape = CircleShape,
+        elevation = FloatingActionButtonDefaults.elevation(defaultElevation = 4.dp),
+        modifier=modifier
+            .size(56.dp)
+            .border(
+                width = 1.dp,
+                color = Color.Black,
+                shape = CircleShape
+            )
+    ) {
+        Image(
+            modifier = modifier
+                .size(dimensionResource(R.dimen.image_size))
+                .padding(dimensionResource(R.dimen.padding_small))
+                .clip(MaterialTheme.shapes.small),
+            contentScale = ContentScale.Crop,
+            painter = painterResource(R.drawable.add),
+
+            contentDescription = null
+        )
+
+    }
+}
+
+
+@Composable
 fun Input( label: String, modifier: Modifier = Modifier) {
     var text by remember {
         mutableStateOf("")
@@ -195,7 +287,7 @@ fun CreatePilot(modifier: Modifier = Modifier) {
         Input(
             label = stringResource(R.string.Text_1),
 
-        )
+            )
 
         Input(
             label = stringResource(R.string.Text_2),
@@ -213,24 +305,6 @@ fun CreatePilot(modifier: Modifier = Modifier) {
     }
 }
 
-@Composable
-fun PilotIcon(
-    @DrawableRes pilotIcon: Int,
-    modifier: Modifier = Modifier
-){
-    Image(
-        modifier = modifier
-            .size(dimensionResource(R.dimen.image_size))
-            .padding(dimensionResource(R.dimen.padding_small))
-            .clip(MaterialTheme.shapes.small),
-        contentScale = ContentScale.Crop,
-        painter = painterResource(pilotIcon),
-
-        contentDescription = null
-    )
-
-}
-
 @Preview
 @Composable
 fun GreetingPreview() {
@@ -240,78 +314,5 @@ fun GreetingPreview() {
                 .fillMaxWidth()
                 .padding(16.dp)
         )
-    }
-}
-
-@Composable
-fun PilotInformation(
-    @StringRes pilotName: Int,
-    @StringRes pilotTeam: Int,
-    modifier: Modifier = Modifier
-) {
-    Column(modifier = modifier) {
-        Text(
-            text = stringResource(pilotName),
-            style = MaterialTheme.typography.displaySmall,
-            modifier = Modifier.padding(top = dimensionResource(R.dimen.padding_small))
-        )
-        Text(
-            text = stringResource(pilotTeam),
-            style = MaterialTheme.typography.bodyLarge
-        )
-    }
-}
-
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-fun F2TopBar(modifier: Modifier = Modifier){
-    CenterAlignedTopAppBar(
-        title = {
-            Row(
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                Image(
-                    modifier = Modifier
-                        .size(200.dp),
-                    painter = painterResource(R.drawable.logo_alt_f1),
-
-                    contentDescription = null
-                )
-            }
-        },
-        modifier = modifier
-    )
-}
-
-@Composable
-fun FloatingButton(modifier: Modifier=Modifier){
-    val context = LocalContext.current
-
-    FloatingActionButton(
-        onClick = {
-            Toast.makeText(context, "Hola mundo", Toast.LENGTH_SHORT).show()
-
-        },
-        shape = CircleShape,
-        elevation = FloatingActionButtonDefaults.elevation(defaultElevation = 4.dp),
-        modifier=modifier
-            .size(56.dp)
-            .border(
-                width = 1.dp,
-                color = Color.Black,
-                shape = CircleShape
-            )
-    ) {
-        Image(
-            modifier = modifier
-                .size(dimensionResource(R.dimen.image_size))
-                .padding(dimensionResource(R.dimen.padding_small))
-                .clip(MaterialTheme.shapes.small),
-            contentScale = ContentScale.Crop,
-            painter = painterResource(R.drawable.add),
-
-            contentDescription = null
-        )
-
     }
 }
