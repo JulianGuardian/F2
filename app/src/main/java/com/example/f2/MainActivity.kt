@@ -1,7 +1,6 @@
 package com.example.f2
 
 import android.os.Bundle
-import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
@@ -40,7 +39,6 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.painterResource
@@ -51,10 +49,10 @@ import androidx.compose.ui.unit.sp
 import com.example.f2.data.Pilot
 import com.example.f2.data.pilot
 import com.example.f2.ui.theme.F2Theme
-import androidx.compose.foundation.border
 import androidx.compose.material3.FloatingActionButtonDefaults
-import androidx.compose.ui.platform.LocalContext
-
+import androidx.compose.ui.text.font.FontWeight
+import com.example.f2.ui.theme.Roboto
+import com.example.f2.ui.theme.SegoeUI
 
 
 class MainActivity : ComponentActivity() {
@@ -76,21 +74,38 @@ class MainActivity : ComponentActivity() {
 
 @Composable
 fun F2App() {
-    Scaffold(
-        topBar = { F2TopBar() },
-        floatingActionButton = {
-            FloatingButton ()
-        }
-    ) { innerPadding ->
-        LazyColumn(contentPadding = innerPadding) {
-            items(pilot) {
-                PilotItem(
-                    pilot = it,
-                    modifier = Modifier.padding(dimensionResource(R.dimen.padding_small))
-                )
+    var showCreatePilot by remember {
+        mutableStateOf(false)
+    }
+
+    if(showCreatePilot){
+        CreatePilot(
+            onCancel = { showCreatePilot = false },
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(16.dp)
+        )
+    }
+    else{
+        Scaffold(
+            topBar = { F2TopBar() },
+            floatingActionButton = {
+                FloatingButton {
+                    showCreatePilot = true
+                }
+            }
+        ) { innerPadding ->
+            LazyColumn(contentPadding = innerPadding) {
+                items(pilot) {
+                    PilotItem(
+                        pilot = it,
+                        modifier = Modifier.padding(dimensionResource(R.dimen.padding_small))
+                    )
+                }
             }
         }
     }
+
 }
 
 
@@ -140,12 +155,16 @@ fun PilotInformation(
     Column(modifier = modifier) {
         Text(
             text = stringResource(pilotName),
-            style = MaterialTheme.typography.displaySmall,
+            fontFamily = Roboto,
+            fontWeight = FontWeight.SemiBold,
+            fontSize = 20.sp,
             modifier = Modifier.padding(top = dimensionResource(R.dimen.padding_small))
         )
         Text(
             text = stringResource(pilotTeam),
-            style = MaterialTheme.typography.bodyLarge
+            fontFamily = SegoeUI,
+            fontWeight = FontWeight.Normal,
+            fontSize = 15.sp
         )
     }
 }
@@ -172,23 +191,14 @@ fun F2TopBar(modifier: Modifier = Modifier){
 }
 
 @Composable
-fun FloatingButton(modifier: Modifier=Modifier){
-    val context = LocalContext.current
+fun FloatingButton(modifier: Modifier=Modifier, onClick: () -> Unit){
 
     FloatingActionButton(
-        onClick = {
-            Toast.makeText(context, "Hola mundo", Toast.LENGTH_SHORT).show()
-
-        },
+        onClick = onClick,
         shape = CircleShape,
         elevation = FloatingActionButtonDefaults.elevation(defaultElevation = 4.dp),
         modifier=modifier
             .size(56.dp)
-            .border(
-                width = 1.dp,
-                color = Color.Black,
-                shape = CircleShape
-            )
     ) {
         Image(
             modifier = modifier
@@ -216,6 +226,8 @@ fun Input( label: String, modifier: Modifier = Modifier) {
     ){
         Text(
             text = label,
+            fontFamily = Roboto,
+            fontWeight = FontWeight.Normal,
             fontSize = 18.sp,
             modifier = modifier
                 .align(Alignment.Start)
@@ -228,7 +240,9 @@ fun Input( label: String, modifier: Modifier = Modifier) {
             placeholder = {
                 Text(
                     text = label,
-                    fontSize = 17.sp,
+                    fontFamily = Roboto,
+                    fontWeight = FontWeight.Normal,
+                    fontSize = 18.sp,
                 )
             },
             modifier = modifier
@@ -252,13 +266,15 @@ fun CustomButton(text: String, modifier: Modifier = Modifier, onClick: () -> Uni
     ) {
         Text(
             text = text,
-            fontSize = (18.sp),
+            fontFamily = Roboto,
+            fontWeight = FontWeight.Normal,
+            fontSize = (20.sp),
         )
     }
 }
 
 @Composable
-fun CreatePilot(modifier: Modifier = Modifier) {
+fun CreatePilot(modifier: Modifier = Modifier, onCancel: () -> Unit) {
     Column (
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
@@ -300,7 +316,7 @@ fun CreatePilot(modifier: Modifier = Modifier) {
 
         CustomButton(
             text = stringResource(R.string.Button_2),
-            onClick = { /* Handle button click */ }
+            onClick = onCancel
         )
     }
 }
@@ -310,6 +326,7 @@ fun CreatePilot(modifier: Modifier = Modifier) {
 fun GreetingPreview() {
     F2Theme {
         CreatePilot(
+            onCancel = {},
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(16.dp)
