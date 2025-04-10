@@ -61,6 +61,11 @@ import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.animation.togetherWith
 import androidx.compose.animation.core.tween
+import androidx.compose.foundation.background
+import androidx.compose.foundation.border
+import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.ui.graphics.Color
+import com.example.f2.ui.theme.Shapes
 
 
 class MainActivity : ComponentActivity() {
@@ -121,7 +126,8 @@ fun AltF1App() {
                     items(pilots) {
                         PilotItem(
                             pilot = it,
-                            modifier = Modifier.padding(dimensionResource(R.dimen.padding_small))
+                            modifier = Modifier
+                                .padding(dimensionResource(R.dimen.padding_small))
                         )
                     }
                 }
@@ -136,11 +142,21 @@ fun PilotItem(
     pilot: Pilot,
     modifier: Modifier = Modifier
 ) {
-    Card(modifier = modifier){
+    Card(
+        modifier = modifier
+            .border(
+                width = 1.dp,
+                color=MaterialTheme.colorScheme.inverseSurface,
+                shape = RoundedCornerShape(16.dp),
+
+        )
+
+    ){
         Row(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(dimensionResource(R.dimen.padding_small))
+
         ) {
             PilotIcon(pilot.imageResourceId)
             PilotInformation(pilot.name, pilot.teams)
@@ -180,7 +196,9 @@ fun PilotInformation(
             fontFamily = Roboto,
             fontWeight = FontWeight.SemiBold,
             fontSize = 20.sp,
-            modifier = Modifier.padding(top = dimensionResource(R.dimen.padding_small))
+            modifier = Modifier
+                .padding(top = dimensionResource(R.dimen.padding_small))
+
         )
         Text(
             text = pilotTeam,
@@ -208,7 +226,9 @@ fun F2TopBar(modifier: Modifier = Modifier){
                 )
             }
         },
-        modifier = modifier
+        modifier = modifier.padding(
+            bottom = 10.dp
+        )
     )
 }
 
@@ -219,14 +239,16 @@ fun FloatingButton(modifier: Modifier=Modifier, onClick: () -> Unit){
         onClick = onClick,
         shape = CircleShape,
         elevation = FloatingActionButtonDefaults.elevation(defaultElevation = 4.dp),
+        containerColor = MaterialTheme.colorScheme.inversePrimary,
         modifier=modifier
             .size(56.dp)
     ) {
         Image(
             modifier = modifier
-                .size(dimensionResource(R.dimen.image_size))
+                .size(42.dp)
                 .padding(dimensionResource(R.dimen.padding_small))
                 .clip(MaterialTheme.shapes.small),
+
             contentScale = ContentScale.Crop,
             painter = painterResource(R.drawable.add),
 
