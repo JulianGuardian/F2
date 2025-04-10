@@ -1,14 +1,14 @@
 package com.example.f2.data
 
-import androidx.annotation.DrawableRes
+import android.net.Uri
 import com.example.f2.R
 
 data class Pilot (
-    @DrawableRes val imageResourceId: Int,
+    val imageUri: Uri?,
     val name: String,
     val teams: String
 )
-
+/*
 var pilots = mutableListOf(
     Pilot(R.drawable.test, "Carlos Sainz", "Ferrari"),
     Pilot(R.drawable.fernando_alonso, "Fernando Alonso", "Aston Martin"),
@@ -20,3 +20,4 @@ var pilots = mutableListOf(
     Pilot(R.drawable.max_verstappen, "Max Verstappen", "Red Bull Racing"),
     Pilot(R.drawable.valtteri_bottas, "Valtteri Bottas", "Kick Sauber"),
 )
+ */
