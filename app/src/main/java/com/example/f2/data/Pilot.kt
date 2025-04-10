@@ -1,7 +1,6 @@
 package com.example.f2.data
 
 import androidx.annotation.DrawableRes
-import androidx.annotation.StringRes
 import com.example.f2.R
 
 data class Pilot (
