@@ -255,6 +255,7 @@ fun Input( label: String, value: String, modifier: Modifier = Modifier, onValueC
             value = value,
             onValueChange = onValueChange,
             shape = RoundedCornerShape(12.dp),
+            singleLine = true,
             placeholder = {
                 Text(
                     text = label,
