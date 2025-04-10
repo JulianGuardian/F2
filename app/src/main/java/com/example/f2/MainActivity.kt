@@ -31,6 +31,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.annotation.DrawableRes
+import androidx.compose.animation.AnimatedContent
+import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -55,6 +57,10 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import com.example.f2.ui.theme.Roboto
 import com.example.f2.ui.theme.SegoeUI
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.togetherWith
+import androidx.compose.animation.core.tween
 
 
 class MainActivity : ComponentActivity() {
@@ -66,7 +72,7 @@ class MainActivity : ComponentActivity() {
                 Surface(
                     modifier = Modifier.fillMaxSize()
                 ){
-                    F2App()
+                    AltF1App()
                 }
 
             }
@@ -74,46 +80,54 @@ class MainActivity : ComponentActivity() {
     }
 }
 
+@OptIn(ExperimentalAnimationApi::class)
 @Composable
-fun F2App() {
+fun AltF1App() {
     var showCreatePilot by remember {
         mutableStateOf(false)
     }
 
-    if(showCreatePilot){
-        CreatePilot(
-            onCancel = { showCreatePilot = false },
-            onSave = { name, team ->
-                pilots.add(
-                    Pilot(R.drawable.default_profile_picture, name, team)
-                )
-                showCreatePilot = false
-            },
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(16.dp)
-        )
-    }
-    else{
-        Scaffold(
-            topBar = { F2TopBar() },
-            floatingActionButton = {
-                FloatingButton {
-                    showCreatePilot = true
-                }
-            }
-        ) { innerPadding ->
-            LazyColumn(contentPadding = innerPadding) {
-                items(pilots) {
-                    PilotItem(
-                        pilot = it,
-                        modifier = Modifier.padding(dimensionResource(R.dimen.padding_small))
+    AnimatedContent(
+        targetState = showCreatePilot,
+        transitionSpec = {
+            fadeIn(animationSpec = tween(300)) togetherWith fadeOut(animationSpec = tween(300))
+        },
+        label = "AnimatedContent"
+    ) { targetState ->
+        if(targetState){
+            CreatePilot(
+                onCancel = { showCreatePilot = false },
+                onSave = { name, team ->
+                    pilots.add(
+                        Pilot(R.drawable.default_profile_picture, name, team)
                     )
+                    showCreatePilot = false
+                },
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(16.dp)
+            )
+        }
+        else {
+            Scaffold(
+                topBar = { F2TopBar() },
+                floatingActionButton = {
+                    FloatingButton {
+                        showCreatePilot = true
+                    }
+                }
+            ) { innerPadding ->
+                LazyColumn(contentPadding = innerPadding) {
+                    items(pilots) {
+                        PilotItem(
+                            pilot = it,
+                            modifier = Modifier.padding(dimensionResource(R.dimen.padding_small))
+                        )
+                    }
                 }
             }
         }
     }
-
 }
 
 
