@@ -1,15 +1,11 @@
 package com.example.f2
 
 import android.content.Context
-import android.net.Uri
 import android.os.Bundle
 import android.widget.Toast
 import androidx.activity.ComponentActivity
-import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
-import androidx.activity.result.PickVisualMediaRequest
-import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -65,10 +61,11 @@ import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.animation.togetherWith
 import androidx.compose.animation.core.tween
+import androidx.compose.foundation.background
 import androidx.compose.foundation.border
-import androidx.compose.foundation.clickable
-import coil.compose.AsyncImage
-import coil.request.ImageRequest
+import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.ui.graphics.Color
+import com.example.f2.ui.theme.Shapes
 
 
 class MainActivity : ComponentActivity() {
@@ -105,9 +102,9 @@ fun AltF1App() {
         if(targetState){
             CreatePilot(
                 onCancel = { showCreatePilot = false },
-                onSave = { name, team, selectedImageUri ->
+                onSave = { name, team ->
                     pilots.add(
-                        Pilot(selectedImageUri, name, team)
+                        Pilot(R.drawable.default_profile_picture, name, team)
                     )
                     showCreatePilot = false
                 },
@@ -171,17 +168,18 @@ fun PilotItem(
 
 @Composable
 fun PilotIcon(
-    imageUri: Uri?,
+    @DrawableRes pilotIcon: Int,
     modifier: Modifier = Modifier
 ){
-    AsyncImage(
-        model = imageUri,
-        contentScale = ContentScale.FillBounds,
-        contentDescription = null,
+    Image(
         modifier = modifier
             .size(dimensionResource(R.dimen.image_size))
             .padding(dimensionResource(R.dimen.padding_small))
-            .clip(MaterialTheme.shapes.small)
+            .clip(MaterialTheme.shapes.small),
+        contentScale = ContentScale.Crop,
+        painter = painterResource(pilotIcon),
+
+        contentDescription = null
     )
 
 }
@@ -319,23 +317,15 @@ fun CustomButton(text: String, modifier: Modifier = Modifier, onClick: () -> Uni
 @Composable
 fun CreatePilot(modifier: Modifier = Modifier,
                 onCancel: () -> Unit,
-                onSave: (String, String, Uri?) -> Unit
+                onSave: (String, String) -> Unit
 ) {
+
     var name by remember {
         mutableStateOf("")
     }
     var team by remember {
         mutableStateOf("")
     }
-    var selectedImageUri by remember {
-        mutableStateOf<Uri?>(null)
-    }
-    val imageSelectorLauncher = rememberLauncherForActivityResult(
-        contract = ActivityResultContracts.PickVisualMedia(),
-        onResult = {
-            selectedImageUri = it
-        }
-    )
     val context = LocalContext.current
 
     Column (
@@ -351,18 +341,12 @@ fun CreatePilot(modifier: Modifier = Modifier,
                 .padding(bottom = 16.dp)
         )
 
-        AsyncImage(
-            model = selectedImageUri?: R.drawable.default_profile_picture,
+        Image(
+            painter = painterResource(id = R.drawable.default_profile_picture),
             contentDescription = null,
-            contentScale = ContentScale.FillBounds,
             modifier = Modifier
                 .size(200.dp)
                 .clip(CircleShape)
-                .clickable { imageSelectorLauncher.launch(
-                    PickVisualMediaRequest(
-                        ActivityResultContracts.PickVisualMedia.ImageOnly
-                    )
-                ) }
         )
 
         Spacer(
@@ -385,7 +369,7 @@ fun CreatePilot(modifier: Modifier = Modifier,
             text = stringResource(R.string.Button_1),
             onClick = {
                 if(name.isNotEmpty() && team.isNotEmpty()) {
-                    onSave(name, team, selectedImageUri)
+                    onSave(name, team)
                 }
                 else {
                     showToast(context, context.getString(R.string.Error_1))
@@ -402,4 +386,18 @@ fun CreatePilot(modifier: Modifier = Modifier,
 
 fun showToast(context:Context, message: String) {
     Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
+}
+
+@Preview
+@Composable
+fun GreetingPreview() {
+    F2Theme {
+        CreatePilot(
+            onCancel = {},
+            onSave = { _, _ -> },
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(16.dp)
+        )
+    }
 }
