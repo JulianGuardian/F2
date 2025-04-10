@@ -61,11 +61,7 @@ import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.animation.togetherWith
 import androidx.compose.animation.core.tween
-import androidx.compose.foundation.background
 import androidx.compose.foundation.border
-import androidx.compose.foundation.layout.fillMaxHeight
-import androidx.compose.ui.graphics.Color
-import com.example.f2.ui.theme.Shapes
 
 
 class MainActivity : ComponentActivity() {
