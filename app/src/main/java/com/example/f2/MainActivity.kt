@@ -1,6 +1,8 @@
 package com.example.f2
 
+import android.content.Context
 import android.os.Bundle
+import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
@@ -29,7 +31,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.annotation.DrawableRes
-import androidx.annotation.StringRes
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -47,9 +48,10 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.f2.data.Pilot
-import com.example.f2.data.pilot
+import com.example.f2.data.pilots
 import com.example.f2.ui.theme.F2Theme
 import androidx.compose.material3.FloatingActionButtonDefaults
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import com.example.f2.ui.theme.Roboto
 import com.example.f2.ui.theme.SegoeUI
@@ -81,6 +83,12 @@ fun F2App() {
     if(showCreatePilot){
         CreatePilot(
             onCancel = { showCreatePilot = false },
+            onSave = { name, team ->
+                pilots.add(
+                    Pilot(R.drawable.default_profile_picture, name, team)
+                )
+                showCreatePilot = false
+            },
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(16.dp)
@@ -96,7 +104,7 @@ fun F2App() {
             }
         ) { innerPadding ->
             LazyColumn(contentPadding = innerPadding) {
-                items(pilot) {
+                items(pilots) {
                     PilotItem(
                         pilot = it,
                         modifier = Modifier.padding(dimensionResource(R.dimen.padding_small))
@@ -148,20 +156,20 @@ fun PilotIcon(
 
 @Composable
 fun PilotInformation(
-    @StringRes pilotName: Int,
-    @StringRes pilotTeam: Int,
+    pilotName: String,
+    pilotTeam: String,
     modifier: Modifier = Modifier
 ) {
     Column(modifier = modifier) {
         Text(
-            text = stringResource(pilotName),
+            text = pilotName,
             fontFamily = Roboto,
             fontWeight = FontWeight.SemiBold,
             fontSize = 20.sp,
             modifier = Modifier.padding(top = dimensionResource(R.dimen.padding_small))
         )
         Text(
-            text = stringResource(pilotTeam),
+            text = pilotTeam,
             fontFamily = SegoeUI,
             fontWeight = FontWeight.Normal,
             fontSize = 15.sp
@@ -216,11 +224,7 @@ fun FloatingButton(modifier: Modifier=Modifier, onClick: () -> Unit){
 
 
 @Composable
-fun Input( label: String, modifier: Modifier = Modifier) {
-    var text by remember {
-        mutableStateOf("")
-    }
-
+fun Input( label: String, value: String, modifier: Modifier = Modifier, onValueChange: (String) -> Unit) {
     Column (
         horizontalAlignment = Alignment.CenterHorizontally
     ){
@@ -234,8 +238,8 @@ fun Input( label: String, modifier: Modifier = Modifier) {
                 .padding(start = 42.dp, bottom = 6.dp)
         )
         OutlinedTextField(
-            value = text,
-            onValueChange = { text = it },
+            value = value,
+            onValueChange = onValueChange,
             shape = RoundedCornerShape(12.dp),
             placeholder = {
                 Text(
@@ -274,7 +278,19 @@ fun CustomButton(text: String, modifier: Modifier = Modifier, onClick: () -> Uni
 }
 
 @Composable
-fun CreatePilot(modifier: Modifier = Modifier, onCancel: () -> Unit) {
+fun CreatePilot(modifier: Modifier = Modifier,
+                onCancel: () -> Unit,
+                onSave: (String, String) -> Unit
+) {
+
+    var name by remember {
+        mutableStateOf("")
+    }
+    var team by remember {
+        mutableStateOf("")
+    }
+    val context = LocalContext.current
+
     Column (
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
@@ -302,16 +318,26 @@ fun CreatePilot(modifier: Modifier = Modifier, onCancel: () -> Unit) {
 
         Input(
             label = stringResource(R.string.Text_1),
-
+            value = name,
+            onValueChange = { name = it }
             )
 
         Input(
             label = stringResource(R.string.Text_2),
+            value = team,
+            onValueChange = { team = it }
         )
 
         CustomButton(
             text = stringResource(R.string.Button_1),
-            onClick = { /* Handle button click */ }
+            onClick = {
+                if(name.isNotEmpty() && team.isNotEmpty()) {
+                    onSave(name, team)
+                }
+                else {
+                    showToast(context, context.getString(R.string.Error_1))
+                }
+            }
         )
 
         CustomButton(
@@ -321,12 +347,17 @@ fun CreatePilot(modifier: Modifier = Modifier, onCancel: () -> Unit) {
     }
 }
 
+fun showToast(context:Context, message: String) {
+    Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
+}
+
 @Preview
 @Composable
 fun GreetingPreview() {
     F2Theme {
         CreatePilot(
             onCancel = {},
+            onSave = { _, _ -> },
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(16.dp)
