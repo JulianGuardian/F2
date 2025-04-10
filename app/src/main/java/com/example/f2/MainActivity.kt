@@ -63,6 +63,11 @@ import androidx.compose.animation.togetherWith
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.text.KeyboardActions
+import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.focus.focusRequester
+import androidx.compose.ui.text.input.ImeAction
 import coil.compose.AsyncImage
 import com.example.f2.data.drawableResToUri
 import com.example.f2.data.getInitialPilots
@@ -259,7 +264,15 @@ fun FloatingButton(modifier: Modifier=Modifier, onClick: () -> Unit){
 
 
 @Composable
-fun Input( label: String, value: String, modifier: Modifier = Modifier, onValueChange: (String) -> Unit) {
+fun Input(
+    label: String,
+    value: String,
+    modifier: Modifier = Modifier,
+    onValueChange: (String) -> Unit,
+    imeAction: ImeAction = ImeAction.Done,
+    onNext: (() -> Unit)? = null,
+    focusRequester: FocusRequester? = null
+) {
     Column (
         horizontalAlignment = Alignment.CenterHorizontally
     ){
@@ -277,6 +290,14 @@ fun Input( label: String, value: String, modifier: Modifier = Modifier, onValueC
             onValueChange = onValueChange,
             shape = RoundedCornerShape(12.dp),
             singleLine = true,
+            keyboardOptions = KeyboardOptions.Default.copy(
+                imeAction = imeAction
+            ),
+            keyboardActions = KeyboardActions(
+                onNext = {
+                    onNext?.invoke()
+                }
+            ),
             placeholder = {
                 Text(
                     text = label,
@@ -290,6 +311,13 @@ fun Input( label: String, value: String, modifier: Modifier = Modifier, onValueC
                 .align(Alignment.CenterHorizontally)
                 .padding(horizontal = 25.dp)
                 .padding(bottom = 25.dp)
+                .then(
+                    if (focusRequester != null) {
+                        modifier.focusRequester(focusRequester)
+                    } else {
+                        modifier
+                    }
+                )
         )
     }
 }
@@ -335,7 +363,7 @@ fun CreatePilot(modifier: Modifier = Modifier,
         }
     )
     val context = LocalContext.current
-
+    val teamFocusManager = remember { FocusRequester() }
     Column (
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
@@ -370,13 +398,18 @@ fun CreatePilot(modifier: Modifier = Modifier,
         Input(
             label = stringResource(R.string.Text_1),
             value = name,
-            onValueChange = { name = it }
+            onValueChange = { name = it },
+            imeAction = ImeAction.Next,
+            onNext = {
+                teamFocusManager.requestFocus()
+            }
             )
 
         Input(
             label = stringResource(R.string.Text_2),
             value = team,
-            onValueChange = { team = it }
+            onValueChange = { team = it },
+            focusRequester = teamFocusManager,
         )
 
         CustomButton(
